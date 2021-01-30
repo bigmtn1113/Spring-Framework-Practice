@@ -1,6 +1,6 @@
 # Spring-Framework-Practice
 
-## ch01
+## ch01. Dev Env
 ### 메이븐 저장소
 #### 메이븐
 - 자바용 프로젝트 관리도구  
@@ -52,3 +52,19 @@ client -(POST 방식)-> CharacterEncodingFilter -> DispatcherServlet -> Controll
 
 ### View 이름을 JSP 경로로 매핑
 #### InternalResourceViewResolver 객체 생성
+
+<br/>
+
+## ch02. Controller - RequestMapping
+### RequestMapping
+#### 요청 방식 매핑
+**GET/POST**  
+- @RequestMapping("/경로")
+
+**GET**  
+- @RequestMapping(value="/경로", method="RequestMapping.GET)
+- @GetMapping("/경로")
+
+**POST**  
+- @RequestMapping(value="/경로", method="RequestMapping.POST)
+- @PostMapping("/경로")
