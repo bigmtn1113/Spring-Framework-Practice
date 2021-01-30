@@ -68,3 +68,34 @@ client -(POST 방식)-> CharacterEncodingFilter -> DispatcherServlet -> Controll
 **POST**  
 - @RequestMapping(value="/경로", method="RequestMapping.POST)
 - @PostMapping("/경로")
+
+<br/>
+
+## ch03. Controller - Request Parameter
+### 요청 파라미터 얻기
+※ 요청 파라미터명을 param1로 가정
+
+#### 요청 파라미터명과 동일한 매개변수 선언
+```java
+public String method(String param1) { ... }
+```
+
+#### 요청 파라미터명과 매개변수명이 다를 경우
+```java
+@RequestParam("param1") String arg1
+```
+
+#### 필수 요청 파라미터
+```java
+@RequestParam(required=true) String param1
+```
+
+#### 파라미터 디폴트 값 설정
+```java
+@RequestParam(defaultValue="문자열") String param1
+```
+
+#### 객체 파라미터
+```java
+public String method(Ch03Dto dto) { ... }
+```
