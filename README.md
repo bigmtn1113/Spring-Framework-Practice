@@ -2,6 +2,11 @@
 
 ## ch01
 ### 메이븐 저장소
+#### 메이븐
+- 자바용 프로젝트 관리도구  
+- 프로젝트의 전체적인 라이프 사이클을 관리  
+- 필요한 라이브러리를 pom.xml에 정의해두면 해당 라이브러리가 작동하는데 필요한 다른 라이브러리들까지 네트워크를 통해 자동으로 다운한다.
+
 #### 중앙 저장소
 - 오픈 소스 라이브러리 관리
 
@@ -25,7 +30,8 @@
 - DispatcherServlet: 개별 빈을 관리하는 WebApplicationContext
 
 **WebApplication**  
-Spring Web MVC에서 사용하는 IoC 컨테이너
+Spring Web MVC에서 사용하는 IoC 컨테이너  
+상속 관계: BeanFactory - ApplicationContext - WebApplicationContext
 
 <br/>
 
