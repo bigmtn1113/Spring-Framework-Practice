@@ -180,3 +180,16 @@ public String method3(@CookieValue String mid, @CookieValue("memail") String ema
 
 저장된 쿠키 이름과 매개변수명이 같을 경우엔 @CookieValue  
 저장된 쿠키 이름과 매개변수명이 다를 경우엔 @CookieValue("저장된 쿠키 이름")
+
+<br/>
+
+## ch06. Controller - Forward/Redirect
+### Forward
+포워드된 JSP는 동일한 HttpServletRequest, HttpServletResponse 객체를 사용  
+request 범위로 데이터 저장 가능
+
+<br/>
+
+### Redirect
+경로를 재지정하면 기존 데이터를 사용할 수 없으므로 Session 객체를 이용하거나  
+경로 뒤에 ?name=value 식으로 재지정된 경로로 기존 데이터를 전송
