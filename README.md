@@ -99,3 +99,65 @@ public String method(String param1) { ... }
 ```java
 public String method(Ch03Dto dto) { ... }
 ```
+
+<br/>
+
+## ch04. Controller - Validation
+### Validation
+#### 준비 사항
+- .properties 파일 생성
+- 메시지를 관리하는 ResourceBundleMessageSource 빈 등록
+- @Valid(폼 유효성 검사 요구)를 사용하기 위한 의존성 설정
+
+#### Validator 클래스 작성
+```java
+public class JoinFormValidator implements Validator {
+  @Override
+  public boolean supports(Class<?> clazz) { ... }   // 유효성 검사 가능 여부 확인(객체 타입 검증)
+  
+  @Override
+  public void validate(Object target, Errors errors) { ... }    // 유효성 검사 실시
+  // target: 검증할 객체
+  // errors: 검증 객체가 올바르지 않을 경우 에러 정보를 저장
+  // errors.rejectValue(): 필드 혹은 객체에 대한 에러코드를 추가. 에러코드에 대한 메시지가 존재하지 않을 경우 defaultMessage를 지정 가능
+}
+```
+
+#### Validator 설정
+```java
+@InitBinder("joinForm")   // joinForm 객체에만 바인딩이나 Validation 설정 적용
+public void joinForm(WebDataBinder binder) {    // binder가 객체를 바인딩
+  binder.setValidator(new JoinFormValidator());   // 특정 Validator를 사용하겠다고 지정
+}
+```
+
+- **@InitBinder**  
+  validate() 메소드를 직접 호출하지 않고 스프링프레임워크에서 호출하는 방법이다.  
+  @InitBinder로 지정한 메소드가 먼저 data 검증을 거치므로 validate()를 호출할 필요가 없다.
+
+```java
+public String join(@ModelAttribute("joinForm") @Valid Member member, BindingResult bindingResult) { ... }
+// BindingResult
+// 유효성 검증 결과를 저장할 때 사용하는 Errors 인터페이스의 하위 인터페이스이다.
+// 인터페이스 Validator를 상속받는 클래스에서 객체값을 검증한다. ex) JoinFormValidator
+```
+
+- **@ModelAttribute**  
+  @ModelAttribute로 지정되는 클래스는 빈 클래스여야 하며, getter와 setter가 만들어져야 한다.
+
+  1. 파라미터로 선언한 객체 타입의 오브젝트를 자동으로 생성한다.
+  2. HTTP로 넘어온 값들을 생성된 객체에 자동으로 바인딩한다.
+  3. 생성된 객체가 자동으로 Model 객체에 주가되고 뷰로 전달된다.
+
+  ※ @RequestParam은 매개변수와 1대 1 매핑할 때 사용하고 @ModelAttribute는 객체로 매핑할 때 사용한다.
+
+- **@Valid**  
+  어노테이션으로 지정한 객체가 유효한 객체인지 검사하도록 지정한다.
+
+#### 에러 메시지 출력
+```jsp
+<form:errors cssClass="error" path="joinForm.mid"/>
+```
+
+Errors, BindingResult 객체를 이용하여 에러 정보를 추가한 경우 에러정보를 출력할 수 있다.  
+path 속성을 이용하여 객체의 특정 프로퍼티와 관련된 에러 메시지를 출력할 수 있다.
