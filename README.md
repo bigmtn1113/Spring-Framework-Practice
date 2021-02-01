@@ -161,3 +161,22 @@ public String join(@ModelAttribute("joinForm") @Valid Member member, BindingResu
 
 Errors, BindingResult 객체를 이용하여 에러 정보를 추가한 경우 에러정보를 출력할 수 있다.  
 path 속성을 이용하여 객체의 특정 프로퍼티와 관련된 에러 메시지를 출력할 수 있다.
+
+<br/>
+
+## ch05. Controller - Header/Cookie
+### 요청 HTTP 헤더값 얻기
+```java
+public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
+```
+
+<br/>
+
+### 쿠키 얻기
+mid와 memail의 이름을 가진 쿠키가 저장되어 있다고 가정하자
+```java
+public String method3(@CookieValue String mid, @CookieValue("memail") String email) { ... }
+```
+
+저장된 쿠키 이름과 매개변수명이 같을 경우엔 @CookieValue  
+저장된 쿠키 이름과 매개변수명이 다를 경우엔 @CookieValue("저장된 쿠키 이름")
