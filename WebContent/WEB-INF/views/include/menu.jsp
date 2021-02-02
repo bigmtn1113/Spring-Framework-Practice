@@ -8,5 +8,6 @@
 		<li class="chapter">Ch04. <a href="<%=application.getContextPath()%>/ch04/content">Controller - Validation</a></li>
 		<li class="chapter">Ch05. <a href="<%=application.getContextPath()%>/ch05/content">Controller - Header/Cookie</a></li>
 		<li class="chapter">Ch06. <a href="<%=application.getContextPath()%>/ch06/content">Controller - Forward/Redirect</a></li>
+		<li class="chapter">Ch07. <a href="<%=application.getContextPath()%>/ch07/content">Controller - Data Delivery</a></li>
 	</ul>
 </div>
