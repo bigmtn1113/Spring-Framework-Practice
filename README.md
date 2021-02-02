@@ -1,6 +1,6 @@
 # Spring-Framework-Practice
 
-## ch01. Dev Env
+## Ch01. Dev Env
 ### 메이븐 저장소
 #### 메이븐
 - 자바용 프로젝트 관리도구  
@@ -55,7 +55,7 @@ client -(POST 방식)-> CharacterEncodingFilter -> DispatcherServlet -> Controll
 
 <br/>
 
-## ch02. Controller - RequestMapping
+## Ch02. Controller - RequestMapping
 ### RequestMapping
 #### 요청 방식 매핑
 **GET/POST**  
@@ -71,7 +71,7 @@ client -(POST 방식)-> CharacterEncodingFilter -> DispatcherServlet -> Controll
 
 <br/>
 
-## ch03. Controller - Request Parameter
+## Ch03. Controller - Request Parameter
 ### 요청 파라미터 얻기
 ※ 요청 파라미터명을 param1로 가정
 
@@ -102,7 +102,7 @@ public String method(Ch03Dto dto) { ... }
 
 <br/>
 
-## ch04. Controller - Validation
+## Ch04. Controller - Validation
 ### Validation
 #### 준비 사항
 - .properties 파일 생성
@@ -164,7 +164,7 @@ path 속성을 이용하여 객체의 특정 프로퍼티와 관련된 에러 �
 
 <br/>
 
-## ch05. Controller - Header/Cookie
+## Ch05. Controller - Header/Cookie
 ### 요청 HTTP 헤더값 얻기
 ```java
 public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
@@ -173,7 +173,8 @@ public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
 <br/>
 
 ### 쿠키 얻기
-mid와 memail의 이름을 가진 쿠키가 저장되어 있다고 가정하자
+※ mid와 memail의 이름을 가진 쿠키가 저장되어 있다고 가정
+
 ```java
 public String method3(@CookieValue String mid, @CookieValue("memail") String email) { ... }
 ```
@@ -183,7 +184,7 @@ public String method3(@CookieValue String mid, @CookieValue("memail") String ema
 
 <br/>
 
-## ch06. Controller - Forward/Redirect
+## Ch06. Controller - Forward/Redirect
 ### Forward
 포워드된 JSP는 동일한 HttpServletRequest, HttpServletResponse 객체를 사용  
 request 범위로 데이터 저장 가능
@@ -193,3 +194,52 @@ request 범위로 데이터 저장 가능
 ### Redirect
 경로를 재지정하면 기존 데이터를 사용할 수 없으므로 Session 객체를 이용하거나  
 경로 뒤에 ?name=value 식으로 기존 데이터를 전송
+
+<br/>
+
+## Ch07. Controller - Data Delivery
+### View(JSP)로 객체 전달
+#### ModelAndView
+```java
+public ModelAndView method() {
+  // object 객체 생성 코드 생략
+  ModelAndView mav = new ModelAndView();
+  
+  mav.addObject("objectName", object);
+  mav.setViewName("뷰 경로");
+  return mav;
+}
+```
+
+#### Model
+```java
+public String method(Model model) {
+  // object 객체 생성 코드 생략
+  model.addAttribute("objectName", object);
+  return "경로";
+}
+```
+
+#### @ModelAttribute
+```java
+@ModelAttribute("objectName")
+public Object getObject() {
+  // object 객체 생성 코드 생략
+  return object;
+}
+
+public String method() {
+  return "경로";
+}
+```
+다른 메소드보다 먼저 실행된 후, request에 객체를 저장하므로 공통 객체로서 사용이 가능하다.  
+getObject()가 다른 메소드보다 먼저 실행되고, 리턴한 객체는 objectName으로 request에 저장된다.
+
+#### Command Object
+```java
+public String method(Board b) {
+  return "경로";
+}
+```
+Command Object(폼의 데이터를 저장하는 객체)는 클래스 이름의 첫 자를 소문자로 한 이름으로 저장된다.  
+즉, b가 아니라 board라는 이름으로 저장된다.
