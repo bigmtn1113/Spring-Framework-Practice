@@ -1,6 +1,6 @@
 # Spring-Framework-Practice
 
-## ch01. Dev Env
+## Ch01. Dev Env
 ### 메이븐 저장소
 #### 메이븐
 - 자바용 프로젝트 관리도구  
@@ -55,7 +55,7 @@ client -(POST 방식)-> CharacterEncodingFilter -> DispatcherServlet -> Controll
 
 <br/>
 
-## ch02. Controller - RequestMapping
+## Ch02. Controller - RequestMapping
 ### RequestMapping
 #### 요청 방식 매핑
 **GET/POST**  
@@ -71,7 +71,7 @@ client -(POST 방식)-> CharacterEncodingFilter -> DispatcherServlet -> Controll
 
 <br/>
 
-## ch03. Controller - Request Parameter
+## Ch03. Controller - Request Parameter
 ### 요청 파라미터 얻기
 ※ 요청 파라미터명을 param1로 가정
 
@@ -102,7 +102,7 @@ public String method(Ch03Dto dto) { ... }
 
 <br/>
 
-## ch04. Controller - Validation
+## Ch04. Controller - Validation
 ### Validation
 #### 준비 사항
 - .properties 파일 생성
@@ -164,7 +164,7 @@ path 속성을 이용하여 객체의 특정 프로퍼티와 관련된 에러 �
 
 <br/>
 
-## ch05. Controller - Header/Cookie
+## Ch05. Controller - Header/Cookie
 ### 요청 HTTP 헤더값 얻기
 ```java
 public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
@@ -183,7 +183,7 @@ public String method3(@CookieValue String mid, @CookieValue("memail") String ema
 
 <br/>
 
-## ch06. Controller - Forward/Redirect
+## Ch06. Controller - Forward/Redirect
 ### Forward
 포워드된 JSP는 동일한 HttpServletRequest, HttpServletResponse 객체를 사용  
 request 범위로 데이터 저장 가능
