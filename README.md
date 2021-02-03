@@ -293,6 +293,9 @@ Controller위에 세션으로 공유할 객체 이름을 명시한다. 그러면
   }
   // 세션에 objectName이 없으면 메소드 실행 후 리턴 객체를 objectName으로 생성한다.
   // 없으면 메소드를 실행하지 않고 기존 객체 사용한다.
+  
+  // @SessionAttributes에 objectName이 선언되었으므로 objectName은 세션 객체로 사용된다.
+  // objectName이 선언되어 있지 않을 경우엔 reqeust 범위로 사용된다.
   ```
 
 - **객체 가져오기**
