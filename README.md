@@ -241,3 +241,74 @@ public String method(Board b) {
 ```
 Command Object(폼의 데이터를 저장하는 객체)는 클래스 이름의 첫 자를 소문자로 한 이름으로 저장된다.  
 즉, b가 아니라 board라는 이름으로 저장된다.
+
+<br/>
+
+## Ch08. Controller - Session Support
+### 세션 지원
+#### HttpSession
+웹 애플리케이션에서 지속적으로 유지되어야 할 사용자 데이터를 저장할 때 사용한다. ex) 로그인 정보
+
+- **데이터 저장**
+  ```java
+  public String method(String mid, HttpSession session) {   // 데이터 저장
+    session.setAttribute("sessionMid", mid);
+    ...
+  }
+  ```
+
+- **데이터 읽기**
+  ```java
+  public String method(@SessionAttribute("sessionMid") String mid, HttpSession session) {   // 데이터 읽기
+    // String mid = (String) session.getAttribute("sessionMid");
+    // @SessionAttribute("sessionMid")를 통해 sessionMid라는 객체의 값을 찾아와 mid에 대입 했으므로 그냥 mid를 사용하면 된다.
+    ...
+  }
+  ```
+
+- **데이터 제거**
+  ```java
+  public String method(HttpSession session) {    // 데이터 제거
+    // session.removeAttribute("sessionMid");
+    session.invalidate();
+    ...
+  }
+  ```
+
+#### @SessionAttributes
+화면과 화면 사이에 임시적으로 데이터를 유지할 때 사용한다. ex) 단계별 입력 폼 작성(이전 단계 입력 내용 유지)  
+Controller위에 세션으로 공유할 객체 이름을 명시한다. 그러면 해당 Controller에서만 공유 객체로 사용된다.
+
+- **공유 객체 이름 설정**
+  ```java
+  @SessionAttributes({"objectName"})
+  public class Ch08Controller { ... }
+  ```
+
+- **객체 저장**
+  ```java
+  @ModelAttribute("objectName")
+  public Object createObject() {
+    return new Object();
+  }
+  // 세션에 objectName이 없으면 메소드 실행 후 리턴 객체를 objectName으로 생성한다.
+  // 없으면 메소드를 실행하지 않고 기존 객체 사용한다.
+  ```
+
+- **객체 가져오기**
+  ```java
+  public String method(@ModelAttribute("objectName") Object object) { ... }
+  // object로 넘어온 값이 없다 = objectName -(값 대입)-> object
+  // object로 넘어온 값이 있다 = object -(값 대입)-> objectName
+  // 단, objectName 객체가 세션에 존재하지 않으면 예외가 발생한다.
+  ```
+
+- **객체 제거**
+  ```java
+  public String method(SessionStatus sessionStatus) {
+    sessionStatus.setComplete();
+    ...
+  }
+  // @SessionAttributes로 선언한 공유 객체들이 제거된다.
+  // @SessionAttributes로 지정하지 않은 세션들은 제거되지 않는다.
+  ```
