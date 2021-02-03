@@ -129,18 +129,16 @@ public class JoinFormValidator implements Validator {
 public void joinForm(WebDataBinder binder) {    // binder가 객체를 바인딩
   binder.setValidator(new JoinFormValidator());   // 특정 Validator를 사용하겠다고 지정
 }
-```
 
-- **@InitBinder**  
-  validate() 메소드를 직접 호출하지 않고 스프링프레임워크에서 호출하는 방법이다.  
-  @InitBinder로 지정한 메소드가 먼저 data 검증을 거치므로 validate()를 호출할 필요가 없다.
-
-```java
 public String join(@ModelAttribute("joinForm") @Valid Member member, BindingResult bindingResult) { ... }
 // BindingResult
 // 유효성 검증 결과를 저장할 때 사용하는 Errors 인터페이스의 하위 인터페이스이다.
 // 인터페이스 Validator를 상속받는 클래스에서 객체값을 검증한다. ex) JoinFormValidator
 ```
+
+- **@InitBinder**  
+  validate() 메소드를 직접 호출하지 않고 스프링프레임워크에서 호출하는 방법이다.  
+  @InitBinder로 지정한 메소드가 먼저 data 검증을 거치므로 validate()를 호출할 필요가 없다.
 
 - **@ModelAttribute**  
   @ModelAttribute로 지정되는 클래스는 빈 클래스여야 하며, getter와 setter가 만들어져야 한다.
