@@ -165,7 +165,7 @@ path 속성을 이용하여 객체의 특정 프로퍼티와 관련된 에러 �
 ## Ch05. Controller - Header/Cookie
 ### 요청 HTTP 헤더값 얻기
 ```java
-public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
+public String method(@RequestHeader("user-Agent") String userAgent) { ... }
 ```
 
 <br/>
@@ -174,7 +174,7 @@ public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
 ※ mid와 memail의 이름을 가진 쿠키가 저장되어 있다고 가정
 
 ```java
-public String method3(@CookieValue String mid, @CookieValue("memail") String email) { ... }
+public String method(@CookieValue String mid, @CookieValue("memail") String email) { ... }
 ```
 
 저장된 쿠키 이름과 매개변수명이 같을 경우엔 @CookieValue  
