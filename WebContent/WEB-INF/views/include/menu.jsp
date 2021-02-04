@@ -10,5 +10,6 @@
 		<li class="chapter">Ch06. <a href="<%=application.getContextPath()%>/ch06/content">Controller - Forward/Redirect</a></li>
 		<li class="chapter">Ch07. <a href="<%=application.getContextPath()%>/ch07/content">Controller - Data Delivery</a></li>
 		<li class="chapter">Ch08. <a href="<%=application.getContextPath()%>/ch08/content">Controller - Session Support</a></li>
+		<li class="chapter">Ch09. <a href="<%=application.getContextPath()%>/ch09/content">Controller - File Upload/Download</a></li>
 	</ul>
 </div>
