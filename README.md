@@ -129,18 +129,16 @@ public class JoinFormValidator implements Validator {
 public void joinForm(WebDataBinder binder) {    // binder가 객체를 바인딩
   binder.setValidator(new JoinFormValidator());   // 특정 Validator를 사용하겠다고 지정
 }
-```
 
-- **@InitBinder**  
-  validate() 메소드를 직접 호출하지 않고 스프링프레임워크에서 호출하는 방법이다.  
-  @InitBinder로 지정한 메소드가 먼저 data 검증을 거치므로 validate()를 호출할 필요가 없다.
-
-```java
 public String join(@ModelAttribute("joinForm") @Valid Member member, BindingResult bindingResult) { ... }
 // BindingResult
 // 유효성 검증 결과를 저장할 때 사용하는 Errors 인터페이스의 하위 인터페이스이다.
 // 인터페이스 Validator를 상속받는 클래스에서 객체값을 검증한다. ex) JoinFormValidator
 ```
+
+- **@InitBinder**  
+  validate() 메소드를 직접 호출하지 않고 스프링프레임워크에서 호출하는 방법이다.  
+  @InitBinder로 지정한 메소드가 먼저 data 검증을 거치므로 validate()를 호출할 필요가 없다.
 
 - **@ModelAttribute**  
   @ModelAttribute로 지정되는 클래스는 빈 클래스여야 하며, getter와 setter가 만들어져야 한다.
@@ -167,7 +165,7 @@ path 속성을 이용하여 객체의 특정 프로퍼티와 관련된 에러 �
 ## Ch05. Controller - Header/Cookie
 ### 요청 HTTP 헤더값 얻기
 ```java
-public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
+public String method(@RequestHeader("user-Agent") String userAgent) { ... }
 ```
 
 <br/>
@@ -176,7 +174,7 @@ public String method1(@RequestHeader("user-Agent") String userAgent) { ... }
 ※ mid와 memail의 이름을 가진 쿠키가 저장되어 있다고 가정
 
 ```java
-public String method3(@CookieValue String mid, @CookieValue("memail") String email) { ... }
+public String method(@CookieValue String mid, @CookieValue("memail") String email) { ... }
 ```
 
 저장된 쿠키 이름과 매개변수명이 같을 경우엔 @CookieValue  
@@ -243,3 +241,77 @@ public String method(Board b) {
 ```
 Command Object(폼의 데이터를 저장하는 객체)는 클래스 이름의 첫 자를 소문자로 한 이름으로 저장된다.  
 즉, b가 아니라 board라는 이름으로 저장된다.
+
+<br/>
+
+## Ch08. Controller - Session Support
+### 세션 지원
+#### HttpSession
+웹 애플리케이션에서 지속적으로 유지되어야 할 사용자 데이터를 저장할 때 사용한다. ex) 로그인 정보
+
+- **데이터 저장**
+  ```java
+  public String method(String mid, HttpSession session) {   // 데이터 저장
+    session.setAttribute("sessionMid", mid);
+    ...
+  }
+  ```
+
+- **데이터 읽기**
+  ```java
+  public String method(@SessionAttribute("sessionMid") String mid, HttpSession session) {   // 데이터 읽기
+    // String mid = (String) session.getAttribute("sessionMid");
+    // @SessionAttribute("sessionMid")를 통해 sessionMid라는 객체의 값을 찾아와 mid에 대입 했으므로 그냥 mid를 사용하면 된다.
+    ...
+  }
+  ```
+
+- **데이터 제거**
+  ```java
+  public String method(HttpSession session) {    // 데이터 제거
+    // session.removeAttribute("sessionMid");
+    session.invalidate();
+    ...
+  }
+  ```
+
+#### @SessionAttributes
+화면과 화면 사이에 임시적으로 데이터를 유지할 때 사용한다. ex) 단계별 입력 폼 작성(이전 단계 입력 내용 유지)  
+Controller위에 세션으로 공유할 객체 이름을 명시한다. 그러면 해당 Controller에서만 공유 객체로 사용된다.
+
+- **공유 객체 이름 설정**
+  ```java
+  @SessionAttributes({"objectName"})
+  public class Ch08Controller { ... }
+  ```
+
+- **객체 저장**
+  ```java
+  @ModelAttribute("objectName")
+  public Object createObject() {
+    return new Object();
+  }
+  // 세션에 objectName이 없으면 메소드 실행 후 리턴 객체를 objectName으로 생성한다.
+  // 없으면 메소드를 실행하지 않고 기존 객체 사용한다.
+  
+  // @SessionAttributes에 objectName이 선언되었으므로 objectName은 세션 객체로 사용된다.
+  // objectName이 선언되어 있지 않을 경우엔 reqeust 범위로 사용된다.
+  ```
+
+- **객체 가져오기**
+  ```java
+  public String method(@ModelAttribute("objectName") Object object) { ... }
+  // object로 넘어온 값이 없다 = objectName -(값 대입)-> object
+  // object로 넘어온 값이 있다 = object -(값 대입)-> objectName
+  // 단, objectName 객체가 세션에 존재하지 않으면 예외가 발생한다.
+  ```
+
+- **객체 제거**
+  ```java
+  public String method(SessionStatus sessionStatus) {
+    sessionStatus.setComplete();
+    ...
+  }
+  // @SessionAttributes로 선언한 공유 객체들이 제거된다.
+  // @SessionAttributes로 지정하지 않은 세션들은 제거되지 않는다.
+  ```
