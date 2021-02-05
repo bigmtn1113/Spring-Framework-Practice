@@ -315,3 +315,70 @@ Controller위에 세션으로 공유할 객체 이름을 명시한다. 그러면
   // @SessionAttributes로 선언한 공유 객체들이 제거된다.
   // @SessionAttributes로 지정하지 않은 세션들은 제거되지 않는다.
   ```
+
+<br/>
+
+## Ch09. Controller - File Upload/Download
+### File Upload
+#### 흐름
+multipart/form-data -> MultipartResolver(파싱) -> 문자 파트, 파일 파트(MultipartFile) -> 요청 매핑 메소드
+
+#### MultipartResolver 설정
+- pom.xml에 의존 라이브러리 추가
+- MultipartResolver 빈 생성하는 xml 작성(root에 배치)
+
+#### 메소드 작성
+```java
+public String method(MultipartFile attach) {
+  String fileName = new Date().getTime() + "_" + attach.getOriginalFilename();  // 중복 방지를 위해 파일 이름 앞에시간 붙이기
+  attach.transferTo(new File("파일 경로" + fileName));
+  ...
+}
+```
+
+<br/>
+
+### File Download
+```java
+public void method(String fileName, HttpServletRequest request, HttpServletResponse response) throws Exception {
+  // 파일의 데이터를 읽기 위한 입력 스트림 얻기
+  String saveFilePath = "파일 경로" + fileName;
+  InputStream is = new FileInputStream(saveFilePath);
+
+  // 응답 HTTP 헤더 구성
+  // 1) Content-Type 헤더 구성
+  ServletContext application = request.getServletContext();
+  String fileType = application.getMimeType(fileName);
+  response.setContentType(fileType);
+
+  // 2) Content-Disposition 헤더 구성
+  String originalFileName = fileName.split("_")[1];
+  originalFileName = new String(originalFileName.getBytes("UTF-8"), "ISO-8859-1");	// 한글 아스키코드화
+  response.setHeader("Content-Disposition", "attachment; filename=\"" + originalFileName + "\"");
+
+  // 3) Content-Length 헤더 구성(다운로드할 파일의 크기를 지정)
+  int fileSize = (int) new File(saveFilePath).length();
+  response.setContentLength(fileSize);
+
+  // 응답 HTTP의 바디(본문) 구성
+  OutputStream os = response.getOutputStream();
+  FileCopyUtils.copy(is, os);
+  os.flush();
+  os.close();
+  is.close();
+}
+```
+리턴값이 void라 JSP로 가지 않고 바로 요청에 대한 응답내용으로 전송한다.
+
+<br/>
+
+### File list 출력
+```java
+public String method(Model model) {
+  File uploadDir = new File("파일 경로");
+  String[] fileNames = uploadDir.list();
+  model.addAttribute("fileNames", fileNames);
+  ...
+}
+```
+fileNames의 원소들을 꺼내면서 View에 표시하면 된다.
