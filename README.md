@@ -382,3 +382,47 @@ public String method(Model model) {
 }
 ```
 fileNames의 원소들을 꺼내면서 View에 표시하면 된다.
+
+<br/>
+
+## Ch10. Controller - Execution Handling
+### Exception Handling
+exception을 비지니스 로직에 넣지 않고 분리함으로써 비지니스 로직에 좀 더 집중할 수 있게 한다.
+
+#### DAO, Service에서 발생된 예외는 최종 Controller에서  처리
+DAO -> Service -> Controller
+
+#### web.xml로 에러 처리
+```xml
+<error-page>
+  <error-code>404</error-code>
+  <location>예외 처리 결과 페이지 경로</location>
+</error-page>
+```
+
+#### Controller 예외 처리 클래스 작성
+- @Component와 @ControllerAdvice 적용
+- 예외별로 처리하는 메소드에 @ExceptionHandler 적용
+
+```java
+@Component
+@ControllerAdvice
+public class Ch10ExceptionHandler {
+  @ExceptionHandler
+	public String handleException(NullPointerException e) { ... }
+  
+  @ExceptionHandler
+	public String handleException(RuntimeException e) { ... }
+}
+```
+Controller에서 예외 발생 -> 예외 처리 클래스에서 해당 예외를 처리하는 메소드 실행
+
+**@Component**  
+빈 등록할 때 사용한다.  
+xml에서 component-scan으로 @Component를 검색하도록 설정한 뒤 사용한다.
+
+**@ControllerAdvice**  
+모든 @Controller 즉, 전역에서 발생할 수 있는 예외를 잡아 처리해주는 annotation이다.
+
+**@ExceptionHandler**  
+@Controller가 적용된 Bean내에서 발생하는 예외를 잡아서 하나의 메서드에서 처리해주는 기능을 한다.
