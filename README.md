@@ -387,7 +387,8 @@ fileNames의 원소들을 꺼내면서 View에 표시하면 된다.
 
 ## Ch10. Controller - Execution Handling
 ### Exception Handling
-exception을 비지니스 로직에 넣지 않고 분리함으로써 비지니스 로직에 좀 더 집중할 수 있게 한다.
+try-catch를 서블릿마다 작성하면 중복 코드가 많아지므로 유지보수가 힘들어진다.  
+exception을 비지니스 로직에 넣지 않고 분리함으로써 비지니스 로직에 좀 더 집중할 수 있게 한다.  
 
 #### DAO, Service에서 발생된 예외는 최종 Controller에서  처리
 DAO -> Service -> Controller
