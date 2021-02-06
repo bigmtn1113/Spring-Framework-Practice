@@ -12,5 +12,6 @@
 		<li class="chapter">Ch08. <a href="<%=application.getContextPath()%>/ch08/content">Controller - Session Support</a></li>
 		<li class="chapter">Ch09. <a href="<%=application.getContextPath()%>/ch09/content">Controller - File Upload/Download</a></li>
 		<li class="chapter">Ch10. <a href="<%=application.getContextPath()%>/ch10/content">Controller - Exception Handling</a></li>
+		<li class="chapter">Ch11. <a href="<%=application.getContextPath()%>/ch11/content">View - Spring Tag Library</a></li>
 	</ul>
 </div>
