@@ -43,3 +43,24 @@ Command 객체의 필드에 값이 있으면 태그의 value처럼 값이 표시
 - **itemValue**: path값으로 대입할 내용
 
 Command 객체의 필드에 값이 있으면 그 값과 일치하는 item 값이 option의 selected처럼 표시된다.
+
+#### checkboxes
+```jsp
+<form:form modelAttribute="member">
+  개발언어: <form:checkboxes path="mlanguage" items="${languageList}"/><br/>
+  개발스킬: <form:checkboxes path="mskill" items="${skillList}" itemLabel="label" itemValue="value"/><br/>
+...
+</form:form>
+```
+
+#### radiobuttons
+```jsp
+<form:form modelAttribute="member">
+  회원종류: <form:radiobuttons path="mtype" items="${typeList}"/><br/>
+  회원도시: <form:radiobuttons path="mcity" items="${cityList}" itemLabel="label" itemValue="value"/><br/>
+...
+</form:form>
+```
+
+options, checkboxes, radiobuttons에서 특정 값을 active 상태로 만들고 싶다면 active 처리할 값을 지정하고  
+form 태그를 사용하면 된다. 그러면 복잡하게 반복문을 돌릴 필요없이 알아서 지정한 값을 active 처리해준다.
