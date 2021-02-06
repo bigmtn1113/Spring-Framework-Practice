@@ -64,3 +64,55 @@ Command 객체의 필드에 값이 있으면 그 값과 일치하는 item 값이
 
 ※ options, checkboxes, radiobuttons에서 특정 값을 active 상태로 만들고 싶다면 active 처리할 값을 지정하고  
 form 태그를 사용하면 된다. 그러면 복잡하게 반복문을 돌릴 필요없이 알아서 지정한 값을 active 처리해준다.
+
+<br/>
+
+### 국제화(Internationalization)
+#### LocaleResolver
+Spring MVC는 LocaleResolver를 이용해 사용자의 지역 정보를 얻는다.
+
+LocaleResolver는 인터페이스인데 스프링은 4가지 구현 클래스를 지원한다.  
+별도로 설정하지 않으면 기본적으로 AcceptHeaderLocaleResolver를 사용한다.  
+AcceptHeaderLocaleResolver는 요청 HTTP 헤더의 accept-language 부분에서 Locale 정보를 추출한다.
+
+브라우저의 언어 설정을 바꾸면 Locale이 바뀐다.
+
+#### 언어별 메시지 작성
+- xxx_ko.properties(한국어)
+  ```
+  join.form.mid=아이디
+  ```
+- xxx_en.properties(영어)
+  ```
+  join.form.mid=ID
+  ```
+
+#### MessageSource xml 설정
+```xml
+<bean id="messageSource" class="org.springframework.context.support.ResourceBundleMessageSource">
+  <property name="basenames">
+    <list>
+      <value>message.ch04_error</value>
+      <value>message.ch11_internationalization</value>
+    </list>
+  </property>
+  <property name="defaultEncoding" value="UTF-8"/>
+</bean>
+```
+
+#### JSP에서 사용
+```jsp
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<spring:message code="join.form.mid"/>
+```
+
+#### Java에서 사용
+```java
+@Autowired private MessageSource messageSource;
+
+public String method() {
+  Locale locale = LocaleContextHolder.getLocale();
+  String idText = messageSource.getMessage("join.form.mid", null, locale);
+  ...
+}
+```
