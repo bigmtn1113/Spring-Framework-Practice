@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- View 이름을 객체로 연결 시켜주는 객체 -->
+	<!-- InternalResourceViewResolver는 JSP로 이동하게 하는 것이고
+		BeanNameViewResolver는 bean으로 등록된 객체를 찾는 것이다. 이게 더 우선순위(order의 값)가 높다.
+		즉, 먼저 실행된다. -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<property name="order" value="0"/>
+	</bean>
+
+</beans>
