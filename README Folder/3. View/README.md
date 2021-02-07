@@ -116,3 +116,43 @@ public String method() {
   ...
 }
 ```
+
+<br/>
+
+## Ch12. View - BeanNameViewResolver
+### BeanNameViewResolver
+Controller가 리턴한 뷰 이름을 JSP 경로로 해석하지 않고 Bean 이름으로 해석한다.  
+Bean으로 등록된 뷰 객체를 찾는다.  
+자바 코드를 이용해서 응답을 제공할 경우에 사용한다. ex) 파일 다운로드, JSON 응답
+
+하나의 DispatcherServlet은 다수의 ViewResolver를 사용할 수 있는데, 이때 order 옵션으로 사용 순서를 정한다.  
+우선순위가 높은 ViewResolver가 null을 리턴하면, 그 다음 우선순위를 가진 ViewResolver에게 view가 요청된다.  
+그런데 InternalResourceViewResolver는 항상 view 이름에 매핑되는 view 객체를 리턴하므로 null을 리턴하지 않는다.  
+그러므로 우선순위가 높다면 그보다 낮은 ViewResolver가 실행되지 않는다.  
+이런 이유로 InternalResourceViewResolver는 우선순위가 제일 낮아야 한다.
+
+#### xml 설정
+**BeanNameViewResolver**
+```xml
+<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+  <property name="order" value="0"/>    <!-- 우선순위 설정 -->
+</bean>
+```
+**InternalResourceViewResolver**
+```xml
+<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+  <property name="order" value="1"/>    <!-- 우선순위 설정 -->
+  <property name="prefix" value="/WEB-INF/views/"/>
+  <property name="suffix" value=".jsp"/>
+</bean>
+```
+우선순위 숫자는 높을수록 우선순위가 낮다.
+
+#### View 클래스 작성
+```java
+@Component
+public class FileDownloadView extends AbstractView{
+  @Override
+  protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception { ... }
+```
+@Component로 Bean을 등록해야 BeanNameViewResolver가 찾을 수 있다.
