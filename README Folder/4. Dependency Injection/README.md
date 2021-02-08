@@ -215,3 +215,48 @@ public class ClassName {...}
     }
   }
   ```
+
+#### 인터페이스 타입 주입
+인터페이스를 구현한 구현 클래스가 여러개 있거나 동일한 타입을 가진 Bean 객체가 여러개 있을 경우  
+객체들을 식별할 수 있어야 주입이 가능하다.
+
+```java
+public interface TestDao { ... }
+
+public class TestDao1 implements TestDao { ... }
+public class TestDao2 implements TestDao { ... }
+```
+
+```java
+public class XXXService {
+  @Autowired @Qualifier("testDao1Qualifier") private TestDao td1;
+  @Autowired @Qualifier("testDao2Qualifier") private TestDao td2;
+  
+  @Resource(name="testDao1") private TestDao td1;
+  @Resource(name="testDao2") private TestDao td2;
+  
+  @Inject @Named("testDao1") private TestDao td1;
+  @Inject @Named("testDao2") private TestDao td2;
+}
+```
+이때 @Autowired의 @Qualifier를 사용하기 위해선 XML이나 Annotation 설정이 필요하다.
+- **XML을 이용한 설정**
+  ```xml
+  <bean name="testDao1" class="package...ClassName">
+    <qualifier value="testDao1Qualifier"/>
+  </bean>
+  <bean name="testDao2" class="package...ClassName">
+    <qualifier value="testDao2Qualifier"/>
+  </bean>
+  ```
+
+- **Annotation을 이용한 설정**
+  ```java
+  @Repository
+  @Qualifier("testDao1Qualifier")
+  public class TestDao1 implements TestDao { ... }
+  
+  @Repository
+  @Qualifier("testDao2Qualifier")
+  public class TestDao2 implements TestDao { ... }
+  ```
