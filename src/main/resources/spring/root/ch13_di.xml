@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 기본 생성자를 이용해서 객체 생성 -->
+	<bean id="ch13BoardDao1" class="com.mycompany.webapp.dao.Ch13BoardDao1"/>
+	<bean id="ch13BoardDao2" class="com.mycompany.webapp.dao.Ch13BoardDao2"/>
+	<!-- Ch13BoardDao3를 생성자가 아닌 다른 메소드로 객체를 생성할 경우 -->
+	<bean id="ch13BoardDao3" class="com.mycompany.webapp.dao.Ch13BoardDao3" factory-method="getInstance"/>
+	<!-- Ch13Service1 객체를 통해서 Ch13BoardDao4를 생성할 경우 -->
+	<bean id="ch13Service1" class="com.mycompany.webapp.service.Ch13Service1"/>
+	<bean id="ch13BoardDao4" factory-bean="ch13Service1" factory-method="getInstance"/>
+	<!-- 생성자 주입과 함께 객체 생성 -->
+	<bean id="ch13Service2" class="com.mycompany.webapp.service.Ch13Service2">
+		<constructor-arg ref="ch13BoardDao1"/>
+		<constructor-arg value="5"/>
+	</bean>
+	<!-- Setter(프로퍼티) 주입과 함께 객체 생성 -->
+	<bean id="ch13Service3" class="com.mycompany.webapp.service.Ch13Service3">
+		<property name="dao1" ref="ch13BoardDao1"/>
+		<property name="value1" value="3"/>
+	</bean>
+
+	<!-- Setter(프로퍼티) 주입과 함께 객체 생성2 -->
+	<!-- NameSpaces에서 p 추가한 후 사용 -->
+	<!-- <bean id="ch13Service3" class="com.mycompany.webapp.service.Ch13Service3"
+		p:dao1-ref="ch13BoardDao1"
+		p:value1="3"/> -->
+
+	<!-- Setter 주입으로 컬렉션 값 주기 -->
+	<bean id="ch13Service4" class="com.mycompany.webapp.service.Ch13Service4">
+		<property name="skillList">
+			<list>
+				<value>문자열</value>
+				<ref bean="ch13BoardDao1"/>
+			</list>
+		</property>
+		<property name="skillSet">
+			<set>
+				<value>문자열</value>
+				<ref bean="ch13BoardDao1"/>
+			</set>
+		</property>
+		<property name="skillMap">
+			<map>
+				<entry key="key1" value="5"></entry>
+				<entry key="key2" value-ref="ch13BoardDao1"></entry>
+			</map>
+		</property>
+		<property name="skillProp">
+			<props>
+				<prop key="skill1">Java</prop>
+				<prop key="skill2">Spring Framework</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- properties의 값들을 관리하는 객체 설정 -->
+	<context:property-placeholder location="classpath:properties/*.properties"/>
+	
+	<bean id="ch13Service8" class="com.mycompany.webapp.service.Ch13Service8">
+		<constructor-arg index="0" value="${service.prop1}"/>
+		<constructor-arg index="1" value="${service.prop2}"/>
+		<property name="prop3" value="${service.prop3}"/>
+		<property name="prop4" value="${service.prop4}"/>
+	</bean>
+
+</beans>
