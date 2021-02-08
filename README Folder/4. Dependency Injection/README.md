@@ -28,3 +28,75 @@ public class ClassName {...}
 - 웹 애플리케이션 구동 시 자동으로 객체가 생성되고 관리된다.
 - id 또는 name이 주어지지 않으면 클래스 이름의 첫자를 소문자로 한 이름을 사용한다.
 - 기본 생성자가 필요하다.
+
+<br/>
+
+### DI
+의존적인 객체를 직접 생성하지 않고 객체 실행에 필요한 다른 객체를 외부에서 주입하는 것을 말한다.  
+결합도를 낮추고 유연하게 동작하기 위해 사용한다.
+
+#### XML을 이용한 주입
+- 생성자 주입
+  ```xml
+  <bean name="name" class="package...ClassName">
+    <constructor-arg ref="beanName">
+    <constructor-arg value="value">
+  </bean>
+  ```
+  
+- 프로퍼티(Setter) 주입
+  ```xml
+  <bean name="name" class="package...ClassName">
+    <property name="propertyName" ref="beanName">
+    <property name="propertyName" value="value">
+  </bean>
+
+  <!-- p NameSpace 사용 -->
+  <bean name="name" class="package...ClassName">
+    <p:propertyName-ref="beanName">
+    <p:propertyName="value">
+  </bean>
+  ```
+  
+- Collections 주입
+  ```xml
+  <!-- List -->
+  <bean name="name" class="package...ClassName">
+    <property name="propertyName">
+      <list>
+        <value>문자열</value>    <!-- 값 대입 -->
+        <ref bean="beanName"/>    <!-- 객체 대입 -->
+      </list>
+    </property>
+  </bean>
+
+  <!-- Set -->
+  <bean name="name" class="package...ClassName">
+    <property name="propertyName">
+      <set>
+        <value>문자열</value>
+        <ref bean="beanName"/>
+      </set>
+    </property>
+  </bean>
+
+  <!-- Map -->
+  <bean name="name" class="package...ClassName">
+    <property name="propertyName">
+      <map>
+        <entry key="key1" value="value1"/>
+        <entry key="key2" value-ref="beanName"/>
+      </map>
+    </property>
+  </bean>
+
+  <!-- Properties -->
+  <bean name="name" class="package...ClassName">
+    <property name="propertyName">
+      <props>
+        <prop key="key1">value1</prop>
+        <prop key="key2">value2</prop>
+      </props>
+    </property>
+  </bean>
+  ```
