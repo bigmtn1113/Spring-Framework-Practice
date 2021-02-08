@@ -100,3 +100,79 @@ public class ClassName {...}
     </property>
   </bean>
   ```
+  Properties는 Java에서 지원하며, Map처럼 key와 value로 이루어져 있다.  
+  .properties 파일을 읽어서 key와 value 값을 사용한다.
+
+#### Annotation을 이용한 주입
+| | @Autowired | @Resource | @Inject |
+| :---: | :---: | :---: | :---: |
+| 지원 | Spring | Java | Java |
+| 사용 위치 | 필드, 생성자, Setter | 필드, Setter | 필드, 생성자, Setter |
+| Bean 검색 순서 | 타입 -> 이름 | 이름 -> 타입 | 타입 -> 이름 |
+| Bean이 없을 시 | required=false 옵션으로 예외 발생 방지 가능 | 예외 발생 | 예외 발생
+| 주입 Bean 지정 | @Autowired @Qualifier("name") | @Resource(name="name") | @Inject @Named("name") |
+
+- **@Autowired**  
+  주입하고자 하는 객체의 타입과 일치하는 객체를 자동으로 주입한다.  
+  타입으로 찾다가 없으면 이름으로 찾는다.  
+  Spring에서 지원하며, Spring에 의존적이어서 다른 프레임워크으로 전환 시 사용할 수 없다.
+  
+  ```java
+  public class XXXService {
+    @Autowired private TestDao1 td1;   // 필드 주입
+    private TestDao2 td2;
+    private TestDao3 td3;
+
+    @Autowired
+    public XXXService(TestDao2 td2) {   // 생성자 주입
+      this.td2 = td2;
+    }
+    
+    @Autowired
+    public void setTestDao3(TestDao3 td3) {   // Setter 주입
+      this.td3 = td3;
+    }
+  }
+  ```
+  td1, 2, 3의 이름을 가진 객체를 대입하는 것이 아니라 TestDao1, 2, 3의 타입을 가진 객체를 대입한다.
+
+- **@Resource**  
+  주입하고자 하는 객체의 이름과 일치하는 객체를 자동으로 주입한다.  
+  이름으로 객체를 찾다가 없으면 타입으로 찾는다.
+  
+  ```java
+  public class XXXService {
+    @Resource private TestDao1 td1;   // 필드 주입
+    private TestDao2 td2;
+    
+    @Resource
+    public void setTestDao2(TestDao2 td2) {   // Setter 주입
+      this.td2 = td2;
+    }
+  }
+  ```
+  @Autowired와 @Inject와 다르게 생성자로 주입할 수 없다.
+
+- **@Inject**  
+  주입하고자 하는 객체의 타입과 일치하는 객체를 자동으로 주입한다.  
+  타입으로 찾다가 없으면 이름으로 찾는다.  
+  의존 라이브러리 설정을 추가로 해야 사용 가능하다.
+  
+  ```java
+  public class XXXService {
+    @Inject private TestDao1 td1;   // 필드 주입
+    private TestDao2 td2;
+    private TestDao3 td3;
+
+    @Inject
+    public XXXService(TestDao2 td2) {   // 생성자 주입
+      this.td2 = td2;
+    }
+    
+    @Inject
+    public void setTestDao3(TestDao3 td3) {   // Setter 주입
+      this.td3 = td3;
+    }
+  }
+  ```
+  td1, 2, 3의 이름을 가진 객체를 대입하는 것이 아니라 TestDao1, 2, 3의 타입을 가진 객체를 대입한다.
