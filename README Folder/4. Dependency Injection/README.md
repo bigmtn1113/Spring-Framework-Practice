@@ -176,3 +176,42 @@ public class ClassName {...}
   }
   ```
   td1, 2, 3의 이름을 가진 객체를 대입하는 것이 아니라 TestDao1, 2, 3의 타입을 가진 객체를 대입한다.
+
+#### 외부 프로퍼티 파일(.properties)의 값 주입
+- **properties 파일 작성**  
+  ```
+  test.prop1=1
+  test.prop2=test
+  test.prop3=false
+  ```
+
+- **프로퍼티 파일 설정**  
+  ```xml
+  <context:property-placeholder location="properties 폴더 경로/*.properties"/>
+  ```
+
+- **XML을 이용한 주입**  
+  ```xml
+  <bean name="name" class="package...ClassName">
+    <constructor-arg index="0" value="${test.prop2}"/>
+    <property name="prop3" value="${test.prop3}"/>
+  </bean>
+  ```
+
+- **Annotation을 이용한 주입**  
+  ```java
+  public class XXXService {
+    @Value("${test.prop1}") private int prop1;
+    private String prop2;
+    private boolean prop3;
+
+    public XXXService(@Value("${test.prop2}") String prop2) {
+      this.prop2 = prop2;
+    }
+    
+    @Value("${test.prop3}")
+    public void setProp3(boolean prop3) {
+      this.prop3 = prop3;
+    }
+  }
+  ```
