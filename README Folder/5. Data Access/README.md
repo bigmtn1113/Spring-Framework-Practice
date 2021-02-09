@@ -77,3 +77,64 @@
   ```xml
   <jee:jndi-lookup id="dataSource" jndi-name="jdbc/spring" expected-type="javax.sql.DataSource"/>
   ```
+
+<br/>
+
+### MyBatis
+JDBC를 이용하면 클래스에 반복된 코드가 존재하게 되고 한 파일에 java언어와 sql언어가 있어서 재사용성이 안좋아지는 단점이 있다.  
+MyBatis를 사용함으로써 이러한 단점들을 없앨 수 있다.
+
+#### 특징
+- SQL과 객체를 매핑하는 Mapper XML 문서를 사용한다.
+- SQL 기반 매핑이므로 기술적 난이도가 적다.
+- 복잡한 JDBC 코드를 간소화할 수 있다.
+
+#### Mapper XML 문서 템플릿을 위한 Plugin 설치
+- MyBatipse
+
+#### DataSource XML 설정
+```xml
+<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+  <property name="dataSource" ref="dataSource"/>
+  <property name="configLocation" value="classpath:mybatis/mapper-config.xml"/>
+  <property name="mapperLocations" value="classpath:mybatis/mapper/*.xml"/>
+</bean>
+
+<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+  <constructor-arg ref="sqlSessionFactory"/>
+</bean>
+```
+
+#### Mapper Config XML 설정
+```xml
+<configuration>
+  <typeAliases>
+    <typeAlias alias="name" type="package...ClassName" />
+    <typeAlias alias="name" type="package...ClassName" />
+    ...
+  </typeAliases>
+</configuration>
+```
+
+#### Mapper XML
+프로그램 객체로 DB 테이블과 작업을 하도록 SQL과 매핑을 정의한 XML 파일이다.  
+DB 테이블 당 하나의 XML 파일로 작성하는 것이 원칙이다.
+
+**member.xml**
+```xml
+<mapper namespace="mybatis.mapper.member">
+
+  <insert id="insert" parameterType="member">
+    insert into member (mid, mname, mpassword, menabled, mrole, mphoto)
+    values (#{mid}, #{mname}, #{mpassword}, #{menabled}, #{mrole}, #{mphoto})
+  </insert>
+
+  <select id="selectByMid" parameterType="string" resultType="member">
+    select *
+    from member
+    where mid = #{mid}
+  </select>
+  
+  ...
+</mapper>
+```
