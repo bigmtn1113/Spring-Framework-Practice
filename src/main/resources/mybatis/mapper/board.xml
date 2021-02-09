@@ -1,0 +1,54 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace = "mybatis.mapper.board">
+
+	<select id = "selectAll" resultType = "board">
+		select bno, btitle, bcontent, bdate, mid
+		from board
+		order by bdate desc
+	</select>
+	
+	<select id = "selectByPage" parameterType = "pager" resultType = "board">
+		select rnum, bno, btitle, bdate, mid, mphoto
+		from(
+		    select rownum as rnum, bno, btitle, bdate, mid, mphoto
+		    from(
+		        select bno, btitle, bdate, b.mid, mphoto
+		        from board b, member m
+		        where b.mid = m.mid
+		        order by bno desc
+		    )
+		    where rownum &lt; = #{endRowNo}
+		)
+		where rnum &gt; = #{beginRowNo}
+	</select>
+	
+	<select id = "countAll" resultType = "int">
+		select count(*) from board
+	</select>
+	
+	<select id = "selectByBno" parameterType = "int" resultType = "board">
+		select bno, btitle, bcontent, bdate, b.mid, mphoto
+		from board b, member m
+		where b.mid = m.mid and b.bno = #{bno}
+	</select>
+	
+	<insert id = "insert" parameterType = "board">
+		<selectKey order = "BEFORE" resultType = "int" keyProperty = "bno">
+			select seq_board_bno.nextval from dual
+		</selectKey>
+	
+		insert into board(bno, btitle, bcontent, bdate, mid)
+		values(#{bno}, #{btitle}, #{bcontent}, sysdate, #{mid})
+	</insert>
+	
+	<delete id = "deleteByBno" parameterType = "int">
+		delete from board
+		where bno = #{bno}
+	</delete>
+	
+	<update id = "update" parameterType = "board">
+		update board set btitle = #{btitle}, bcontent = #{bcontent}
+		where bno = #{bno}
+	</update>
+</mapper>

@@ -15,5 +15,6 @@
 		<li class="chapter">Ch11. <a href="<%=application.getContextPath()%>/ch11/content">View - Spring Tag Library</a></li>
 		<li class="chapter">Ch12. <a href="<%=application.getContextPath()%>/ch12/content">View - BeanNameViewResolver</a></li>
 		<li class="chapter">Ch13. <a href="<%=application.getContextPath()%>/ch13/content">DI(Dependency Injection)</a></li>
+		<li class="chapter">Ch14. <a href="<%=application.getContextPath()%>/ch14/content">Data Access</a></li>
 	</ul>
 </div>
