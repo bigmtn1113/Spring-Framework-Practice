@@ -138,3 +138,35 @@ DB 테이블 당 하나의 XML 파일로 작성하는 것이 원칙이다.
   ...
 </mapper>
 ```
+
+<br/>
+
+### DAO(Data Access Object)
+#### DAO 클래스 작성 요령
+- @Repository를 이용해 관리 빈으로 설정한다.
+- 향후 DBMS가 변경될 소지가 있다면 인터페이스 구현 클래스로 작성한다.
+- 애플리케이션의 로직 코드는 작성하지 않는다.
+- 테이블 당 1개씩 작성하는 것을 원칙으로 한다.
+- DB 입출력 코드만 작성하되, DBMS 의존적인 연결 코드는 작성하지 않는다. ex) DBMS 연결 문자열
+- 메소드 이름은 작업하고자 하는 SQL 문과 동일한 이름을 짓는다. ex) insert(), update(), ...
+- 메소드 내부에서 예외 처리를 하지 말아야 한다.
+- 컬럼의 값을 따로 매개값으로 받기 보다는 행을 표현하는 DTO로 받는다.
+- insert, update, delete 메소드의 리턴 값은 반영된 행수로 한다.
+
+**MemberDao**  
+```java
+@Repository
+public class MemberDao {
+  @Resource private SqlSessionTemplate sst;
+
+  public int insert(Member member) {
+    int rows = sst.insert("mybatis.mapper.member.insert", member);
+    return rows;
+  }
+
+  public Member selectByMid(String mid) {
+    Member dbMember = sst.selectOne("mybatis.mapper.member.selectByMid", mid);
+    return dbMember;
+  }
+}
+```
