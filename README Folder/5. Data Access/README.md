@@ -153,7 +153,7 @@ DB 테이블 당 하나의 XML 파일로 작성하는 것이 원칙이다.
 - 컬럼의 값을 따로 매개값으로 받기 보다는 행을 표현하는 DTO로 받는다.
 - insert, update, delete 메소드의 리턴 값은 반영된 행수로 한다.
 
-**MemberDao**  
+**MemberDao**
 ```java
 @Repository
 public class MemberDao {
@@ -167,6 +167,37 @@ public class MemberDao {
   public Member selectByMid(String mid) {
     Member dbMember = sst.selectOne("mybatis.mapper.member.selectByMid", mid);
     return dbMember;
+  }
+}
+```
+
+<br/>
+
+### Service
+#### Service 클래스 작성 요령
+- @Service를 이용해 관리 빈으로 설정한다.
+- 향후 서비스가 변경될 소지가 있다면 인터페이스 구현 클래스로 작성한다.
+- 애플리케이션의 로직 코드를 작성한다.
+- 로직 구현에 필요한 DAO를 주입받는다.
+- 컬럼의 값을 따로 매개값으로 받기 보다는 행을 표현하는 DTO로 받는다.
+- 선언적 트랜잭션을 사용할 경우 메소드 내부에서 예외 처리를 하지 말아야 한다.
+- 트랜잭션 처리가 필요하면 메소드 단위로 트랜잭션 처리를 한다.
+
+**Service**
+```java
+@Service
+public class TestService {
+  @Resource private MemberDao memberDao;
+  
+  public void join(Member member) {
+    memberDao.insert(member);
+  }
+  
+  public String login(Member member) {
+    Member dbMember = memberDao.selectByMid(member.getMid());
+
+    // 로그인 로직 작성
+    ...
   }
 }
 ```
