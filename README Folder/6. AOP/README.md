@@ -44,3 +44,85 @@ Spring은 Aspect의 적용 대상이 되는 객체에 대한 프록시를 만들
 - **Around**: 핵심 기능 실행 전, 후 또는 예외 발생 시점에 공통 기능을 실행.
 - **AfterReturning**: 핵심 기능이 예외 없이 실행된 후에 공통 기능을 실행
 - **AfterThrowing**: 핵심 기능을 실행하는 도중 예외가 발생할 경우 공통 기능을 실행
+
+<br/>
+
+### Example
+**@Before**  
+```java
+@Component
+@Aspect
+@Order(1)
+public class Aspect1Before {
+  // @Before("execution(public * packageName...className.methodName(parameter))")
+  @Before("execution(public * com.mycompany.webapp.controller.Ch15Controller.before(..))")
+  public void method() {
+    // 전처리 내용
+  }
+}
+
+@Component
+@Aspect
+@Order(2)
+public class Aspect2Before {
+  @Before("execution(public * com.mycompany.webapp.controller.Ch15Controller.before(..))")
+  public void method() {
+    // 전처리 내용
+  }
+}
+```
+
+**@After**  
+```java
+@Component
+@Aspect
+public class Aspect3After {
+  @After("execution(public * com.mycompany.webapp.controller.Ch15Controller.after(..))")
+  public void method() {
+    // 후처리 내용
+  }
+}
+```
+
+**@Around**  
+```java
+@Component
+@Aspect
+public class Aspect4Around {
+  @Around("execution(public * com.mycompany.webapp.controller.Ch15Controller.around(..))")
+  public Object method(ProceedingJoinPoint joinPoint) throws Throwable {
+    // 전처리 내용
+    
+    // 핵심 기능 실행
+    Object result = joinPoint.proceed();
+    
+    // 후처리 내용
+    
+    return result;
+  }
+}
+```
+
+**@AfterReturning**  
+```java
+@Component
+@Aspect
+public class Aspect5AfterReturning {
+  @AfterReturning("execution(public * com.mycompany.webapp.controller.Ch15Controller.afterReturning(..))", returning = "ret")
+  public void method(String ret) {
+    // 후처리 내용
+  }
+}
+```
+
+**@AfterThrowing**  
+```java
+@Component
+@Aspect
+public class Aspect6AfterThrowing {
+  @AfterThrowing("execution(public * com.mycompany.webapp.controller.Ch15Controller.afterThrowing(..))", throwing = "ex")
+  public void method(Throwable ex) {
+    // 후처리 내용
+  }
+}
+```
