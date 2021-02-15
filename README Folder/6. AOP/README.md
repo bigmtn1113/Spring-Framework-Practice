@@ -26,7 +26,7 @@ Spring은 Aspect의 적용 대상이 되는 객체에 대한 프록시를 만들
 #### Spring AOP 설정
 - dispatcher
   ```xml
-  <aop:aspectj-autoproxy/>
+  <aop:aspectj-autoproxy/>    <!-- Bean으로 등록된 클래스 중에서 @Aspect가 선언된 클래스를 모두 Aspect로 자동 등록해준다. -->
   ```
 
 - pom.xml
