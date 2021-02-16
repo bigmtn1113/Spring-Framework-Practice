@@ -54,7 +54,7 @@ Spring은 Aspect의 적용 대상이 되는 객체에 대한 프록시를 만들
 @Aspect
 @Order(1)
 public class Aspect1Before {
-  // @Before("execution(public * packageName...className.methodName(parameter))")
+  // @Before("execution(accessModifier returnType packageName...className.methodName(parameter))")
   @Before("execution(public * com.mycompany.webapp.controller.Ch15Controller.before(..))")
   public void method() {
     // 전처리 내용
