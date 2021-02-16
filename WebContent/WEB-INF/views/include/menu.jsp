@@ -17,5 +17,6 @@
 		<li class="chapter">Ch13. <a href="<%=application.getContextPath()%>/ch13/content">DI(Dependency Injection)</a></li>
 		<li class="chapter">Ch14. <a href="<%=application.getContextPath()%>/ch14/content">Data Access</a></li>
 		<li class="chapter">Ch15. <a href="<%=application.getContextPath()%>/ch15/content">AOP(Aspect Oriented Programming)</a></li>
+		<li class="chapter">Ch16. <a href="<%=application.getContextPath()%>/ch16/content">Transaction</a></li>
 	</ul>
 </div>
