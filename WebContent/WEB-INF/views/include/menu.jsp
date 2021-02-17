@@ -18,5 +18,6 @@
 		<li class="chapter">Ch14. <a href="<%=application.getContextPath()%>/ch14/content">Data Access</a></li>
 		<li class="chapter">Ch15. <a href="<%=application.getContextPath()%>/ch15/content">AOP(Aspect Oriented Programming)</a></li>
 		<li class="chapter">Ch16. <a href="<%=application.getContextPath()%>/ch16/content">Transaction</a></li>
+		<li class="chapter">Ch17. <a href="<%=application.getContextPath()%>/ch17/content">Spring Security</a></li>
 	</ul>
 </div>
