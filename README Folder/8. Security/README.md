@@ -293,3 +293,34 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
   </constructor-arg>
 </bean>
 ```
+
+<br/>
+
+### DelegatingPasswordEncoder
+#### Spring Security 비밀번호 암호화
+```java
+public String join(Member member) {
+  PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  String encodedPassword = passwordEncoder.encode(member.getMpassword());
+  
+  member.setMpassword(encodedPassword);
+  service.join(member);
+  ...
+}
+```
+인증 관리자가 인증을 거칠 때 내부적으로 DelegatingPasswordEncoder가 사용된다.  
+따라서 DB에 {algorithmID}encodedPassword 형태로 비밀번호가 저장되어 있어야 한다.  
+위의 코드대로 진행하면 DB에 {algorithmID}encodedPassword 형태로 비밀번호가 저장된다.
+
+ex) {bcrypt}$2a$10$WyGiB.2bK/GbAdCBRIYZtOlQF9p.ttBh8BkD68e7br5TCAU.BM3b6
+
+<br/>
+
+#### Spring Security를 사용하지 않을 경우 비밀번호 비교
+```java
+private boolean matchPassword(String rawPassword, String encodedPassword) {
+  PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  return passwordEncoder.matches(rawPassword, encodedPassword);
+}
+```
+{algorithmID}encodedPassword를 읽고 해당 알고리즘으로 복호화한 후 rawPassword와 비교한다.
