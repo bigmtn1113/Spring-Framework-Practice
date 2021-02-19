@@ -207,11 +207,13 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
 
 - **URL 권한 설정**
   ```xml
-  <security:intercept-url pattern="/ch17/admin*" access="hasRole('ROLE_ADMIN')"/>
-  <security:intercept-url pattern="/ch17/manager*" access="hasAnyRole('ROLE_MANAGER')"/>
-  <security:intercept-url pattern="/ch17/user*" access="isAuthenticated()"/>	
+  <security:http>
+    <security:intercept-url pattern="/ch17/admin*" access="hasRole('ROLE_ADMIN')"/>
+    <security:intercept-url pattern="/ch17/manager*" access="hasAnyRole('ROLE_MANAGER')"/>
+    <security:intercept-url pattern="/ch17/user*" access="isAuthenticated()"/>	
 
-  <security:intercept-url pattern="/**" access="permitAll"/>
+    <security:intercept-url pattern="/**" access="permitAll"/>
+  </security:http>
   ```
   
   **※ 권한 관련 표현식**  
