@@ -175,3 +175,32 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
                      logout-success-url="/ch17/content"/> 
   </security:http>
   ```
+
+- **CSRF(Cross Site Request Forgery, 사이트간 요청 위조) 방지**  
+  CSRF란 사용자 의지와 무관하게 공격자의 의도대로 서버에 특정 요청을 하도록 하는 기술이다.  
+  이를 방지하는 방법 중에 Token을 이용한 방식은 서버에 들어온 요청이 실제 서버에서 허용한 요청이 맞는지 확인한다.
+  
+  Spring Security는 기본적으로 CSRF 방지가 활성화되어 있다.  
+  POST 요청 시, _csrf 파라미터 값으로 토큰이 전송안되면 403에러가 발생한다.  
+  (GET 방식엔 관여하지 않는다.)
+  
+  **※ _csrf 파라미터 값 추가**  
+  ```jsp
+  <form method="post" action="...">
+    <input type="hidden" name="${_csrf.parameterName}" values="${_csrf.token}"/>
+    <!-- ... -->
+  </form>
+  ```
+  또는
+  ```jsp
+  <form method="post" action="...">
+    <sec:csrfInput/>    <!-- security 태그 사용 -->
+  </form>
+  ```
+  
+  **※ CSRF 비활성화**
+  ```xml
+  <security:http>
+    <security:csrf disabled="true"/>
+  </security:http>
+  ```
