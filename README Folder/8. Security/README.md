@@ -250,8 +250,8 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
   web.xml
   ```xml
   <listener>
-		<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
-	</listener>
+    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
+  </listener>
   ```
   HttpSessionEventPublisher는 로그인 중복을 방지하는 역할을 하는데 리스너를 등록하지 않고서도 session-management 덕분인지 중복이 방지 되었다.  
   아직 정확히 무슨 기능을 하는지 모르겠다.
