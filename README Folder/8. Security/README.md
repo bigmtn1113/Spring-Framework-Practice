@@ -255,3 +255,41 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
   ```
   HttpSessionEventPublisher는 로그인 중복을 방지하는 역할을 하는데 리스너를 등록하지 않고서도 session-management 덕분인지 중복이 방지 되었다.
   아직 정확히 무슨 기능을 하는지 모르겠다.
+
+<br/>
+
+#### 인증 관리자 설정
+```xml
+<!-- 인증 관리자 설정 -->
+<security:authentication-manager>
+  <security:authentication-provider ref="daoAuthenticationProvider"/>
+</security:authentication-manager>
+
+<!-- 인증 제공자 설정 -->
+<bean id="daoAuthenticationProvider" 
+      class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+  <property name="userDetailsService" ref="jdbcUserService"/>
+  <property name="authoritiesMapper" ref="roleHierarchyAuthoritiesMapper"/>
+</bean>
+
+<!-- 사용자 정보 설정 -->
+<security:jdbc-user-service id="jdbcUserService"
+                            data-source-ref="dataSource"
+                            users-by-username-query="select mid, mpassword, menabled from member where mid = ?"
+                            authorities-by-username-query="select mid, mrole from member where mid = ?"/>
+
+<!-- 권한 계층 설정 -->
+<bean id="roleHierarchyAuthoritiesMapper" 
+      class="org.springframework.security.access.hierarchicalroles.RoleHierarchyAuthoritiesMapper">
+  <constructor-arg>
+    <bean class="org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl">
+      <property name="hierarchy">
+        <value>
+          ROLE_ADMIN > ROLE_MANAGER
+          ROLE_MANAGER > ROLE_USER
+        </value>
+      </property>
+    </bean>
+  </constructor-arg>
+</bean>
+```
