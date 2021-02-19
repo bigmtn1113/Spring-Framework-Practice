@@ -225,3 +225,25 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
   permitAll | 모두 허용
   denyAll | 모두 거부
   hasIpAddress('ip') | 주어진 ip만 접근 허용
+
+- **중복 인증 방지**
+  ```xml
+  <security:http>
+    <security:session-management>
+      <!-- 
+      기존 브라우저는 강제 로그아웃, 다른 브라우저는 로그인
+      max-sessions: 최대 세션수
+      error-if-maximum-exceeded: 세션이 초과되었을 때 기존 브라우저 에러 발생 여부
+      expired-url: 사용자의 액션이 있을 때 강제 로그아웃된 브라우저가 이동할 경로 
+      -->
+      <security:concurrency-control max-sessions="1" 
+                                    error-if-maximum-exceeded="false" 
+                                    expired-url="/ch17/loginForm"/>
+      <!-- 
+      기존 브라우저는 로그인 유지, 다른 브라우저는 로그인되지 않고 에러 메시지 출력 
+      <security:concurrency-control max-sessions="1" 
+                                    error-if-maximum-exceeded="true"/> 
+      -->
+    </security:session-management>
+  </security:http>
+  ```
