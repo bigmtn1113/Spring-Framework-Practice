@@ -204,3 +204,22 @@ DispatcherServlet만으로 Spring MVC를 구성할 경우 에러가 발생한다
     <security:csrf disabled="true"/>
   </security:http>
   ```
+
+- **URL 권한 설정**
+  ```xml
+  <security:intercept-url pattern="/ch17/admin*" access="hasRole('ROLE_ADMIN')"/>
+  <security:intercept-url pattern="/ch17/manager*" access="hasAnyRole('ROLE_MANAGER')"/>
+  <security:intercept-url pattern="/ch17/user*" access="isAuthenticated()"/>	
+
+  <security:intercept-url pattern="/**" access="permitAll"/>
+  ```
+  
+  **※ 권한 관련 표현식**  
+  표현식 | 설명
+  --- | ---
+  hasAuthority('role') <br/> hasRole('role') | 주어진 role에 속하는 사용자는 접근 허용
+  hasAnyAuthority('role1', 'role2', ..) <br/> hasAnyRole('role1', 'role2', ...) | 주어진 role 목록 중에 속하는 사용자는 접근 허용
+  isAuthenticated() | 인증(로그인)이 되었다면 접근 허용
+  permitAll | 모두 허용
+  denyAll | 모두 거부
+  hasIpAddress('ip') | 주어진 ip만 접근 허용
